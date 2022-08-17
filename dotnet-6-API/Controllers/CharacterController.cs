@@ -6,12 +6,24 @@ namespace dotnet_6_API.Controllers
     [Route("api/[controller]")]
     public class CharacterController: ControllerBase
     {
-        Character characters = new Character();
+        List<Character> characters = new List<Character>()
+        {
+            new Character(),
+            new Character(){ Id=1,Name="Bhishm",Strength=10,Stamina=10,Category=Category.Warrior},
+        };
 
         [HttpGet("GetCharacters")]
-        public ActionResult GetCharacters()
+        public ActionResult<List<Character>> GetCharacters()
         {
             return Ok(characters);
+        }
+
+        [HttpGet("GetCharacterById/{Id}")]
+        public ActionResult<Character> GetCharacterById(int Id)
+        {
+            Character character = characters.FirstOrDefault(c => c.Id == Id);
+
+            return Ok(character);
         }
     }
 }
