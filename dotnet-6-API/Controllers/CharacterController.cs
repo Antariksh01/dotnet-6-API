@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using dotnet_6_API.Services.CharacterService;
+using Microsoft.AspNetCore.Mvc;
 
 namespace dotnet_6_API.Controllers
 {
@@ -6,30 +7,32 @@ namespace dotnet_6_API.Controllers
     [Route("api/[controller]")]
     public class CharacterController: ControllerBase
     {
-        List<Character> characters = new List<Character>()
+        private readonly ICharacterService _characterService;
+        private List<Character> characters;
+        public CharacterController(ICharacterService characterService)
         {
-            new Character(),
-            new Character(){ Id=1,Name="Bhishm",Strength=10,Stamina=10,Category=Category.Warrior},
-        };
+            _characterService = characterService;
+        }       
 
         [HttpGet("GetCharacters")]
         public ActionResult<List<Character>> GetCharacters()
         {
+            characters = _characterService.GetCharacters();
             return Ok(characters);
         }
 
         [HttpGet("GetCharacterById/{Id}")]
         public ActionResult<Character> GetCharacterById(int Id)
         {
-            Character character = characters.FirstOrDefault(c => c.Id == Id);
+            Character character = _characterService.GetCharacterById(Id);
 
             return Ok(character);
         }
 
-        [HttpPost]
+        [HttpPost("AddCharacter")]
         public ActionResult<List<Character>> AddCharacter(Character character)
         {
-            characters.Add(character);
+            characters = _characterService.AddCharacter(character);
             return Ok(characters);
         }
     }
