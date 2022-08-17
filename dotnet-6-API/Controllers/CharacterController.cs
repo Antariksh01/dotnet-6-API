@@ -25,5 +25,12 @@ namespace dotnet_6_API.Controllers
 
             return Ok(character);
         }
+
+        [HttpPost]
+        public ActionResult<List<Character>> AddCharacter(Character character)
+        {
+            characters.Add(character);
+            return Ok(characters);
+        }
     }
 }
