@@ -20,7 +20,6 @@ namespace dotnet_6_API.Services.CharacterService
                 Name = "Bhishm"
             }
         };
-
         
         public ServiceResponse<List<GetCharacterDTO>> AddCharacter(AddCharacterDTO character)
         {
