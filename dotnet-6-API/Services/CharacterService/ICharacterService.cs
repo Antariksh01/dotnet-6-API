@@ -2,8 +2,8 @@
 {
     public interface ICharacterService
     {
-        public List<Character> GetCharacters();
-        public Character GetCharacterById(int Id);
-        public List<Character> AddCharacter(Character character);
+        public ServiceResponse<List<Character>> GetCharacters();
+        public ServiceResponse<Character> GetCharacterById(int Id);
+        public ServiceResponse<List<Character>> AddCharacter(Character character);
     }
 }

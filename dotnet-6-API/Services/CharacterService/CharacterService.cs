@@ -11,23 +11,29 @@
                 Name = "Bhishm"
             }
         };
-        public List<Character> AddCharacter(Character character)
+        public ServiceResponse<List<Character>> AddCharacter(Character character)
         {
+            var serviceResponse = new ServiceResponse<List<Character>>();           
             characters.Add(character);  
-            return characters;
+            serviceResponse.data = characters;
+            return serviceResponse;
             throw new NotImplementedException();
         }
 
-        public Character GetCharacterById(int Id)
+        public ServiceResponse<Character> GetCharacterById(int Id)
         {
+            var serviceResponse = new ServiceResponse<Character>();
             Character character = characters.FirstOrDefault(c => c.Id == Id);
-            return character;
+            serviceResponse.data = character;
+            return serviceResponse;
             throw new NotImplementedException();
         }
 
-        public List<Character> GetCharacters()
+        public ServiceResponse<List<Character>> GetCharacters()
         {
-            return characters;
+            var response = new ServiceResponse<List<Character>>();
+            response.data = characters;
+            return response;
             throw new NotImplementedException();
         }
     }
