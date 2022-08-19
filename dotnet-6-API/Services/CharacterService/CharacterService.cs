@@ -21,7 +21,7 @@ namespace dotnet_6_API.Services.CharacterService
             }
         };
         
-        public ServiceResponse<List<GetCharacterDTO>> AddCharacter(AddCharacterDTO character)
+        public async Task<ServiceResponse<List<GetCharacterDTO>>> AddCharacter(AddCharacterDTO character)
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDTO>>(); 
             Character characterData = _mapper.Map<Character>(character);
@@ -31,7 +31,7 @@ namespace dotnet_6_API.Services.CharacterService
             return serviceResponse;
         }
 
-        public ServiceResponse<GetCharacterDTO> GetCharacterById(int Id)
+        public async Task<ServiceResponse<GetCharacterDTO>> GetCharacterById(int Id)
         {
             var serviceResponse = new ServiceResponse<GetCharacterDTO>();
             var character = characters.FirstOrDefault(c => c.Id == Id);
@@ -39,7 +39,7 @@ namespace dotnet_6_API.Services.CharacterService
             return serviceResponse;
         }
 
-        public ServiceResponse<List<GetCharacterDTO>> GetCharacters()
+        public async Task<ServiceResponse<List<GetCharacterDTO>>> GetCharacters()
         {
             var response = new ServiceResponse<List<GetCharacterDTO>>();
             response.data = characters.Select(c=> _mapper.Map<GetCharacterDTO>(c)).ToList();

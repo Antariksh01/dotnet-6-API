@@ -8,7 +8,7 @@ namespace dotnet_6_API
         public AutoMapperProfile()
         {
             CreateMap<Character, GetCharacterDTO>();
-            CreateMap<Character, AddCharacterDTO>();
+            CreateMap<AddCharacterDTO, Character>();
         }
     }
 }

@@ -16,24 +16,24 @@ namespace dotnet_6_API.Controllers
         }       
 
         [HttpGet("GetCharacters")]
-        public ActionResult<ServiceResponse<List<GetCharacterDTO>>> GetCharacters()
+        public async Task<ActionResult<ServiceResponse<List<GetCharacterDTO>>>> GetCharacters()
         {
-            characters = _characterService.GetCharacters();
+            characters = await _characterService.GetCharacters();
             return Ok(characters);
         }
 
         [HttpGet("GetCharacterById/{Id}")]
-        public ActionResult<ServiceResponse<GetCharacterDTO>> GetCharacterById(int Id)
+        public async Task<ActionResult<ServiceResponse<GetCharacterDTO>>> GetCharacterById(int Id)
         {
-            ServiceResponse<GetCharacterDTO> character = _characterService.GetCharacterById(Id);  
+            ServiceResponse<GetCharacterDTO> character = await _characterService.GetCharacterById(Id);  
 
             return Ok(character);
         }
 
         [HttpPost("AddCharacter")]
-        public ActionResult<ServiceResponse<List<GetCharacterDTO>>> AddCharacter(AddCharacterDTO character)
+        public async Task<ActionResult<ServiceResponse<List<GetCharacterDTO>>>> AddCharacter(AddCharacterDTO character)
         {
-            characters = _characterService.AddCharacter(character);
+            characters = await _characterService.AddCharacter(character);
             return Ok(characters);
         }
     }

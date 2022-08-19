@@ -4,8 +4,8 @@ namespace dotnet_6_API.Services.CharacterService
 {
     public interface ICharacterService
     {
-        public ServiceResponse<List<GetCharacterDTO>> GetCharacters();
-        public ServiceResponse<GetCharacterDTO> GetCharacterById(int Id);
-        public ServiceResponse<List<GetCharacterDTO>> AddCharacter(AddCharacterDTO character);
+        public Task<ServiceResponse<List<GetCharacterDTO>>> GetCharacters();
+        public Task<ServiceResponse<GetCharacterDTO>> GetCharacterById(int Id);
+        public Task<ServiceResponse<List<GetCharacterDTO>>> AddCharacter(AddCharacterDTO character);
     }
 }
