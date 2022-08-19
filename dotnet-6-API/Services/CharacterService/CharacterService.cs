@@ -1,14 +1,19 @@
 ﻿using AutoMapper;
+using dotnet_6_API.Data;
 using dotnet_6_API.DTO;
+using Microsoft.EntityFrameworkCore;
 
 namespace dotnet_6_API.Services.CharacterService
 {
     public class CharacterService : ICharacterService
     {
         private readonly IMapper _mapper;
-        public CharacterService(IMapper mapper)
+        private readonly DataContext _context;
+
+        public CharacterService(IMapper mapper, DataContext context)
         {
             _mapper = mapper;
+            _context = context;
         }
 
         List<Character> characters = new List<Character>()
@@ -25,26 +30,26 @@ namespace dotnet_6_API.Services.CharacterService
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDTO>>(); 
             Character characterData = _mapper.Map<Character>(character);
-            characterData.Id = characters.Max(c => c.Id) + 1;
-            characters.Add(characterData);
-            serviceResponse.data = characters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList();
+            _context.Characters.Add(characterData);
+            await _context.SaveChangesAsync();
+            serviceResponse.data = await _context.Characters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToListAsync();
             return serviceResponse;
         }
 
         public async Task<ServiceResponse<GetCharacterDTO>> GetCharacterById(int Id)
         {
             var serviceResponse = new ServiceResponse<GetCharacterDTO>();
-            var character = characters.FirstOrDefault(c => c.Id == Id);
-            serviceResponse.data = _mapper.Map<GetCharacterDTO>(character);
+            var dbcharacter = await _context.Characters.FirstOrDefaultAsync(c => c.Id == Id);
+            serviceResponse.data = _mapper.Map<GetCharacterDTO>(dbcharacter);
             return serviceResponse;
         }
 
         public async Task<ServiceResponse<List<GetCharacterDTO>>> GetCharacters()
         {
             var response = new ServiceResponse<List<GetCharacterDTO>>();
-            response.data = characters.Select(c=> _mapper.Map<GetCharacterDTO>(c)).ToList();
+            var dbCharacters = await _context.Characters.ToListAsync();
+            response.data = dbCharacters.Select(c=> _mapper.Map<GetCharacterDTO>(c)).ToList();
             return response;
-            throw new NotImplementedException();
         }
     }
 }
