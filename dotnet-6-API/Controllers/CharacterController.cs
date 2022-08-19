@@ -1,4 +1,5 @@
-﻿using dotnet_6_API.Services.CharacterService;
+﻿using dotnet_6_API.DTO;
+using dotnet_6_API.Services.CharacterService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dotnet_6_API.Controllers
@@ -8,29 +9,29 @@ namespace dotnet_6_API.Controllers
     public class CharacterController: ControllerBase
     {
         private readonly ICharacterService _characterService;
-        private ServiceResponse<List<Character>> characters;
+        private ServiceResponse<List<GetCharacterDTO>> characters;
         public CharacterController(ICharacterService characterService)
         {
             _characterService = characterService;
         }       
 
         [HttpGet("GetCharacters")]
-        public ActionResult<ServiceResponse<List<Character>>> GetCharacters()
+        public ActionResult<ServiceResponse<List<GetCharacterDTO>>> GetCharacters()
         {
             characters = _characterService.GetCharacters();
             return Ok(characters);
         }
 
         [HttpGet("GetCharacterById/{Id}")]
-        public ActionResult<ServiceResponse<Character>> GetCharacterById(int Id)
+        public ActionResult<ServiceResponse<GetCharacterDTO>> GetCharacterById(int Id)
         {
-            ServiceResponse<Character> character = _characterService.GetCharacterById(Id);  
+            ServiceResponse<GetCharacterDTO> character = _characterService.GetCharacterById(Id);  
 
             return Ok(character);
         }
 
         [HttpPost("AddCharacter")]
-        public ActionResult<ServiceResponse<List<Character>>> AddCharacter(Character character)
+        public ActionResult<ServiceResponse<List<GetCharacterDTO>>> AddCharacter(AddCharacterDTO character)
         {
             characters = _characterService.AddCharacter(character);
             return Ok(characters);

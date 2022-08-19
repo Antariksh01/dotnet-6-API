@@ -1,7 +1,16 @@
-﻿namespace dotnet_6_API.Services.CharacterService
+﻿using AutoMapper;
+using dotnet_6_API.DTO;
+
+namespace dotnet_6_API.Services.CharacterService
 {
     public class CharacterService : ICharacterService
     {
+        private readonly IMapper _mapper;
+        public CharacterService(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         List<Character> characters = new List<Character>()
         {
             new Character(),
@@ -11,28 +20,30 @@
                 Name = "Bhishm"
             }
         };
-        public ServiceResponse<List<Character>> AddCharacter(Character character)
+
+        
+        public ServiceResponse<List<GetCharacterDTO>> AddCharacter(AddCharacterDTO character)
         {
-            var serviceResponse = new ServiceResponse<List<Character>>();           
-            characters.Add(character);  
-            serviceResponse.data = characters;
+            var serviceResponse = new ServiceResponse<List<GetCharacterDTO>>(); 
+            Character characterData = _mapper.Map<Character>(character);
+            characterData.Id = characters.Max(c => c.Id) + 1;
+            characters.Add(characterData);
+            serviceResponse.data = characters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList();
             return serviceResponse;
-            throw new NotImplementedException();
         }
 
-        public ServiceResponse<Character> GetCharacterById(int Id)
+        public ServiceResponse<GetCharacterDTO> GetCharacterById(int Id)
         {
-            var serviceResponse = new ServiceResponse<Character>();
-            Character character = characters.FirstOrDefault(c => c.Id == Id);
-            serviceResponse.data = character;
+            var serviceResponse = new ServiceResponse<GetCharacterDTO>();
+            var character = characters.FirstOrDefault(c => c.Id == Id);
+            serviceResponse.data = _mapper.Map<GetCharacterDTO>(character);
             return serviceResponse;
-            throw new NotImplementedException();
         }
 
-        public ServiceResponse<List<Character>> GetCharacters()
+        public ServiceResponse<List<GetCharacterDTO>> GetCharacters()
         {
-            var response = new ServiceResponse<List<Character>>();
-            response.data = characters;
+            var response = new ServiceResponse<List<GetCharacterDTO>>();
+            response.data = characters.Select(c=> _mapper.Map<GetCharacterDTO>(c)).ToList();
             return response;
             throw new NotImplementedException();
         }
