@@ -9,6 +9,7 @@
         public int Stamina { get; set; } = 10;
         public int HitPoints { get; set; } = 10;
         public Category Category { get; set; } = Category.God;
+        public User? User { get; set; }
 
     }
 }
