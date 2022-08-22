@@ -1,5 +1,6 @@
 global using dotnet_6_API.Models;
 using dotnet_6_API.Data;
+using dotnet_6_API.Services.AuthService;
 using dotnet_6_API.Services.CharacterService;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<ICharacterService, CharacterService>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 var app = builder.Build();
 

@@ -18,12 +18,12 @@ namespace dotnet_6_API.Services.AuthService
 
         public async Task<ServiceResponse<int>> RegisterUser(User user, string password)
         {
+            ServiceResponse<int> response = new ServiceResponse<int>();
             CreatePassword(password, out byte[] passwordHash, out byte[] passwordSalt);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
             _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            ServiceResponse<int> response = new ServiceResponse<int>();
+            await _context.SaveChangesAsync();          
             response.data = user.Id;
             return response;
         }
