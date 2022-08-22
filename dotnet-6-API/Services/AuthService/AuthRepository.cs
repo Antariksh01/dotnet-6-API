@@ -19,6 +19,12 @@ namespace dotnet_6_API.Services.AuthService
         public async Task<ServiceResponse<int>> RegisterUser(User user, string password)
         {
             ServiceResponse<int> response = new ServiceResponse<int>();
+            if (await UserExist(user.Username))
+            {
+                response.Success = false;
+                response.Message = "User already exist";
+                return response;
+            }
             CreatePassword(password, out byte[] passwordHash, out byte[] passwordSalt);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
@@ -28,9 +34,14 @@ namespace dotnet_6_API.Services.AuthService
             return response;
         }
 
-        public Task<bool> UserExist(string username)
+        public async Task<bool> UserExist(string username)
         {
-            throw new NotImplementedException();
+            if(await _context.Users.AnyAsync(x => x.Username.ToLower() == username.ToLower()))
+            {
+                return true;
+            }
+            
+            return false;
         }
 
         public void CreatePassword(string password, out byte[] passwordHash, out byte[] passwordSalt)
