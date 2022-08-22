@@ -11,9 +11,25 @@ namespace dotnet_6_API.Services.AuthService
         {
             _context = context;
         }
-        public Task<ServiceResponse<string>> Login(string username, string password)
+        public async Task<ServiceResponse<string>> Login(string username, string password)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<string>();
+            var user = await _context.Users.FirstOrDefaultAsync(c=>c.Username.ToLower() == username.ToLower());
+
+            if (user == null)
+            {
+                response.Success = false;
+                response.Message = "User not found";
+            }
+            else if (!VerifyPassword(password, user.PasswordHash, user.PasswordSalt))
+            {
+                response.Success = false;
+                response.Message = "Password is wrong";
+            }
+            else
+                response.data = user.Id.ToString();
+
+            return response;
         }
 
         public async Task<ServiceResponse<int>> RegisterUser(User user, string password)
@@ -51,5 +67,12 @@ namespace dotnet_6_API.Services.AuthService
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));  
             }
         }
+
+        public bool VerifyPassword(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt)) { 
+               var computeHash =  hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                return computeHash.SequenceEqual(passwordHash);
+            }
     }
 }
