@@ -86,16 +86,19 @@ namespace dotnet_6_API.Services.AuthService
 
         private string CreateToken(User user)
         {
+            var keyValue = _configuration.GetValue<string>("jwt:secretKey");
             List<Claim> claim = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username)
             };
 
+            // SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8
+            //    .GetBytes(_configuration.GetSection("AppSettings:Token").Value));
             SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8
-                .GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+                .GetBytes(keyValue));
 
-            SigningCredentials credentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha512);
+             SigningCredentials credentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha512);
 
             SecurityTokenDescriptor securityTokenDescriptor = new SecurityTokenDescriptor
             {

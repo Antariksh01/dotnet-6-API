@@ -5,6 +5,7 @@ using dotnet_6_API.Services.CharacterService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var jwtKey = builder.Configuration.GetSection("AppSettings:Token").Value;
 
 // Add services to the container.
 builder.Services.AddDbContext<DataContext>(options =>
@@ -17,6 +18,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Host.ConfigureAppConfiguration(builder =>
+{
+    //Connect to your App Config Store using the connection string
+    builder.AddAzureAppConfiguration(jwtKey);
+});
 
 var app = builder.Build();
 
